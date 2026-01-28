@@ -119,8 +119,8 @@
           </div>
 
           <p class="sublede">
-            SpecDiff-2 adds two complementary mechanisms on top of diffusion drafting: train-time alignment (streak-distillation) and
-            test-time selection (self-selection over parallel drafts).
+            <h3>SpecDiff-2 adds two complementary mechanisms on top of diffusion drafting: train-time alignment (streak-distillation) and
+            test-time selection (self-selection over parallel drafts).</h3>
           </p>
 
           <div class="figure-grid">
@@ -227,17 +227,17 @@
       <section id="blog" class="section section--alt">
         <div class="container">
           <h2>Blog</h2>
-          <p class="lede">
+          <!-- <p class="lede">
             Two-part walkthrough: first the core SpecDiff idea, then SpecDiff-2’s alignment improvements and the
             strongest results.
-          </p>
+          </p> -->
 
           <figure class="figure">
             <img
               src="assets/img/comparison-to-sps.png"
               alt="Comparison of classic speculative decoding (sequential drafting bottleneck) versus speculative diffusion decoding (parallel diffusion drafting and improved alignment)."
             />
-            <figcaption>Motivation: diffusion drafting removes the sequential drafting bottleneck; SpecDiff-2 further improves alignment for higher acceptance.</figcaption>
+            <figcaption>Motivation: diffusion drafting removes the sequential drafting bottleneck.</figcaption>
           </figure>
 
           <div class="blog">
@@ -356,10 +356,10 @@
                   <figcaption>Streak-distillation training improves Math500 speed-up over time (reported).</figcaption>
                 </figure>
 
-                <figure class="figure">
+                <!-- <figure class="figure">
                   <img src="assets/img/streak-distill.png" alt="Position-wise acceptance rate vs distance from prefix for base, AR-distillation, and streak-distillation." />
                   <figcaption>Streak-distillation maintains higher acceptance deeper into the draft window (reported +3.2× at later positions).</figcaption>
-                </figure>
+                </figure> -->
 
                 <h4>Test-time acceleration: self-selection</h4>
                 <p>
@@ -375,7 +375,7 @@
                 </p>
 
                 <figure class="figure figure--tight">
-                  <img src="assets/img/test_time_fig.png" alt="Test-time acceleration diagram illustrating self-selection among K drafts." />
+                  <img src="assets/img/ssa_scaling_larger.png" alt="Test-time acceleration diagram illustrating self-selection among K drafts." />
                   <figcaption>Self-selection: generate multiple drafts and verify the one expected to yield the best throughput.</figcaption>
                 </figure>
 
