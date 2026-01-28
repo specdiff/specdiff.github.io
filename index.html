@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>SpecDiff & SpecDiff-2 — Speculative Diffusion Decoding</title>
+    <title>SpecDiff-2</title>
     <meta
       name="description"
       content="Project page for SpecDiff and SpecDiff-2: accelerating LLM decoding with diffusion-model drafters for speculative decoding."
@@ -70,8 +70,6 @@
                 SpecDiff-2 PDF
               </a>
               <a class="btn" href="https://arxiv.org/pdf/2408.05636" target="_blank" rel="noreferrer">SpecDiff PDF</a>
-              <a class="btn" href="specdiff-2_blog.pdf">SpecDiff-2 overview</a>
-              <a class="btn" href="specdiff_blog.pdf">SpecDiff overview</a>
               <a class="btn btn--ghost" href="#blog">Read the blog</a>
             </div>
 
@@ -82,7 +80,7 @@
           </div>
 
           <figure class="hero__figure" aria-label="Teaser diagram">
-            <img src="assets/img/teaser.svg" alt="Diagram showing diffusion drafter proposing token blocks and an LLM verifying them." />
+            <img src="assets/img/key_result.png" alt="Key result figure comparing relative speed-up across methods and model sizes." />
           </figure>
         </div>
       </section>
@@ -120,9 +118,20 @@
             </div>
           </div>
 
+          <div class="figure-grid">
+            <figure class="figure figure--tight">
+              <img src="assets/img/train_time_fig.png" alt="Train-time acceleration diagram: streak-distillation aligns diffusion drafter with verifier." />
+              <figcaption>Train-time acceleration: streak-distillation trains the diffusion drafter to produce long accepted streaks.</figcaption>
+            </figure>
+            <figure class="figure figure--tight">
+              <img src="assets/img/test_time_fig.png" alt="Test-time acceleration diagram: self-selection chooses the best among multiple diffusion drafts." />
+              <figcaption>Test-time acceleration: self-selection picks the draft expected to yield highest throughput.</figcaption>
+            </figure>
+          </div>
+
           <figure class="figure">
-            <img src="assets/img/pipeline.svg" alt="Pipeline: diffusion drafter proposes gamma tokens, verifier scores them, accept longest prefix, repeat." />
-            <figcaption>High-level loop shared by SpecDiff and SpecDiff-2.</figcaption>
+            <img src="assets/img/streak-distill.png" alt="Position-wise acceptance rate vs distance from prefix for base, AR-distillation, and streak-distillation." />
+            <figcaption>Streak-distillation maintains higher acceptance deeper into the draft window (reported +3.2× at later positions).</figcaption>
           </figure>
         </div>
       </section>
@@ -138,8 +147,6 @@
                 <a href="https://arxiv.org/pdf/2408.05636" target="_blank" rel="noreferrer">PDF</a>
                 <span class="sep">·</span>
                 <a href="https://arxiv.org/abs/2408.05636" target="_blank" rel="noreferrer">arXiv</a>
-                <span class="sep">·</span>
-                <a href="specdiff_blog.pdf">alphaXiv overview (PDF)</a>
               </p>
               <p>
                 Introduces diffusion-model drafters for speculative decoding. Shows that masked discrete diffusion
@@ -154,8 +161,6 @@
                 <a href="https://arxiv.org/pdf/2511.00606" target="_blank" rel="noreferrer">PDF</a>
                 <span class="sep">·</span>
                 <a href="https://arxiv.org/abs/2511.00606" target="_blank" rel="noreferrer">arXiv</a>
-                <span class="sep">·</span>
-                <a href="specdiff-2_blog.pdf">alphaXiv overview (PDF)</a>
               </p>
               <p>
                 Adds principled alignment mechanisms tailored to diffusion drafters (streak-distillation + self-selection),
@@ -206,6 +211,11 @@
               </tbody>
             </table>
           </div>
+
+          <figure class="figure" style="margin-top: 16px">
+            <img src="assets/img/cot-reasoning-scaling.png" alt="Acceleration–compute scaling: higher accuracy under fixed reasoning budgets with faster decoding." />
+            <figcaption>Acceleration–compute scaling: faster decoding translates into higher accuracy under fixed time budgets.</figcaption>
+          </figure>
         </div>
       </section>
 
@@ -224,31 +234,32 @@
                 <h3>SpecDiff: diffusion as a speculative drafter</h3>
               </header>
 
-              <h4>Motivation</h4>
-              <p>
-                Standard decoding is sequential: the verifier produces one token at a time. Speculative decoding
-                reduces verifier work by verifying a block of tokens at once — but many systems still use an
-                <em>autoregressive drafter</em>, which remains sequential and limits parallelism.
-              </p>
+              <div class="prose">
+                <p>
+                  If you’ve used speculative decoding before, the story is familiar: a small model drafts tokens and the
+                  large model verifies them in parallel. The speed-up you get is proportional to how many draft tokens
+                  the verifier accepts per iteration.
+                </p>
+                <p>
+                  The catch is that most speculative systems still draft <em>autoregressively</em>, which means the drafter
+                  itself is sequential. SpecDiff asks: what if the drafter could propose a whole block of tokens at once?
+                </p>
 
-              <h4>Key idea</h4>
-              <p>
-                Use a <strong>masked discrete diffusion language model</strong> to draft a window of <code>γ</code> tokens
-                in parallel. Drafting cost is driven mostly by the number of denoising steps, not the draft length.
-              </p>
+                <div class="pullquote">
+                  <strong>Key idea:</strong> Use a masked discrete diffusion language model as the drafter so drafting a window of
+                  <span class="inline-math">γ</span> tokens is parallel over positions (with cost controlled by diffusion steps).
+                </div>
 
-              <h4>How verification works (high level)</h4>
-              <ol class="steps">
-                <li>The diffusion drafter proposes <code>γ</code> candidate tokens (all positions at once).</li>
-                <li>The target LLM computes probabilities for those positions in parallel.</li>
-                <li>Accept the longest prefix of the draft that passes the acceptance rule; then continue.</li>
-              </ol>
+                <p>
+                  Concretely, the diffusion drafter starts from a masked window and iteratively denoises to produce
+                  token distributions for every position. The verifier then scores those positions in parallel and accepts the
+                  longest prefix that passes the acceptance rule. The loop repeats until EOS.
+                </p>
 
-              <h4>Takeaway</h4>
-              <p>
-                SpecDiff shows diffusion drafters can deliver large speed-ups when they remain sufficiently aligned
-                to the verifier — and it highlights alignment as the key lever to push performance further.
-              </p>
+                <p class="aside">
+                  In practice, SpecDiff highlights an important theme for diffusion drafters: <em>alignment</em> matters as much as raw parallelism.
+                </p>
+              </div>
             </article>
 
             <article class="blog__post blog__post--featured">
@@ -257,42 +268,53 @@
                 <h3>SpecDiff-2: scaling alignment (and scaling wins)</h3>
               </header>
 
-              <h4>The bottleneck: misalignment</h4>
-              <p>
-                A diffusion drafter can be fast, but if its proposed tokens are frequently rejected by the verifier,
-                the system spends time drafting tokens that never get used. SpecDiff-2 makes alignment a first-class
-                objective.
-              </p>
+              <div class="prose">
+                <p>
+                  SpecDiff-2 treats the main failure mode head-on: even a very fast diffusion drafter is not useful if the verifier
+                  rejects most of its proposed tokens. When acceptance is low—especially later in the draft window—you end up paying to
+                  draft tokens that never get committed.
+                </p>
 
-              <h4>Train-time alignment: streak-distillation</h4>
-              <p>
-                Rather than optimizing token-wise match, streak-distillation targets <em>contiguous accepted prefixes</em>.
-                Intuitively: maximize the expected length of the accepted “streak” so each verifier call yields more
-                committed tokens.
-              </p>
+                <div class="pullquote">
+                  <strong>SpecDiff-2 in one line:</strong> keep diffusion drafting, but align the drafter to maximize the length of accepted
+                  <em>streaks</em> (train-time), and pick the best among multiple candidate drafts (test-time).
+                </div>
 
-              <h4>Test-time alignment: self-selection acceptance</h4>
-              <p>
-                SpecDiff-2 leverages diffusion’s ability to sample multiple drafts cheaply. From parallel candidates,
-                it selects the one with the highest expected throughput under the verifier, then verifies only that
-                choice.
-              </p>
+                <h4>Train-time acceleration: streak-distillation</h4>
+                <p>
+                  Instead of optimizing for token-wise similarity, streak-distillation optimizes for long contiguous accepted prefixes.
+                  The intuition is simple: the verifier commits a prefix, not independent tokens, so the objective should directly reward
+                  long accepted runs.
+                </p>
 
-              <h4>Why the strongest results matter</h4>
-              <p>
-                Beyond raw speed-ups, SpecDiff-2 emphasizes that faster inference can translate into higher task
-                accuracy under fixed time budgets (e.g., spending saved time on longer reasoning chains).
-              </p>
+                <figure class="figure">
+                  <img src="assets/img/streak-distill_speedup.png" alt="Math500 speed-up vs streak-distillation steps, showing improvements for Qwen2.5-14B and Qwen2.5-72B." />
+                  <figcaption>Streak-distillation training improves Math500 speed-up over time (reported).</figcaption>
+                </figure>
 
-              <h4>Results snapshot (as reported)</h4>
-              <ul class="bullets">
-                <li><strong>Average speed-up:</strong> 4.22× without quality loss; up to 5.5×.</li>
-                <li><strong>Throughput vs prior baselines:</strong> +55%.</li>
-                <li><strong>Math-500:</strong> 4.71× average speed-up (vs EAGLE-2’s 3.43×).</li>
-                <li><strong>GPQA:</strong> 3.24× speed-up (vs EAGLE-2’s 2.80×).</li>
-                <li><strong>Late-position acceptance:</strong> +3.2× at later draft positions (from streak-distillation analysis).</li>
-                <li><strong>Multi-draft scaling:</strong> up to +20% throughput with 8 parallel drafts (temperature-tuned).</li>
-              </ul>
+                <h4>Test-time acceleration: self-selection</h4>
+                <p>
+                  At inference time, diffusion models make it cheap to sample multiple candidate drafts in parallel. SpecDiff-2 uses this to
+                  generate <span class="inline-math">K</span> drafts, estimate expected throughput, and verify only the best draft.
+                </p>
+
+                <figure class="figure figure--tight">
+                  <img src="assets/img/test_time_fig.png" alt="Test-time acceleration diagram illustrating self-selection among K drafts." />
+                  <figcaption>Self-selection: generate multiple drafts and verify the one expected to yield the best throughput.</figcaption>
+                </figure>
+
+                <h4>Acceleration–compute scaling</h4>
+                <p>
+                  One of the most compelling takeaways is that faster decoding can translate into better results when users (or systems)
+                  operate under time constraints. If you can generate more tokens in the same wall-clock budget, you can allocate more “thinking”
+                  to reasoning-heavy tasks.
+                </p>
+
+                <figure class="figure">
+                  <img src="assets/img/cot-reasoning-scaling.png" alt="Math500 accuracy improves with increased reasoning budget; SpecDiff-2 reaches higher accuracy at fixed budget." />
+                  <figcaption>Faster decoding → higher accuracy under fixed budgets (reported on Math500 with a 15s budget).</figcaption>
+                </figure>
+              </div>
             </article>
           </div>
         </div>
