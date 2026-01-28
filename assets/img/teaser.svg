@@ -1,0 +1,66 @@
+<svg width="1200" height="760" viewBox="0 0 1200 760" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SpecDiff teaser diagram">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1200" y2="760" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#0F1836"/>
+      <stop offset="1" stop-color="#070A14"/>
+    </linearGradient>
+    <linearGradient id="grad1" x1="0" y1="0" x2="1" y2="1">
+      <stop stop-color="#8DD3FF" stop-opacity="0.9"/>
+      <stop offset="1" stop-color="#B8A1FF" stop-opacity="0.85"/>
+    </linearGradient>
+    <filter id="blur" x="-40" y="-40" width="1280" height="840" filterUnits="userSpaceOnUse">
+      <feGaussianBlur stdDeviation="24"/>
+    </filter>
+  </defs>
+
+  <rect width="1200" height="760" rx="28" fill="url(#bg)"/>
+  <circle cx="260" cy="170" r="160" fill="#8DD3FF" fill-opacity="0.14" filter="url(#blur)"/>
+  <circle cx="980" cy="210" r="180" fill="#B8A1FF" fill-opacity="0.12" filter="url(#blur)"/>
+
+  <g opacity="0.9">
+    <rect x="90" y="160" width="420" height="210" rx="18" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="130" y="210" fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui" font-size="22" font-weight="700">Diffusion drafter</text>
+    <text x="130" y="246" fill="rgba(255,255,255,0.7)" font-family="ui-sans-serif, system-ui" font-size="16">Proposes a window of γ tokens</text>
+    <text x="130" y="272" fill="rgba(255,255,255,0.7)" font-family="ui-sans-serif, system-ui" font-size="16">in parallel via denoising steps</text>
+
+    <g>
+      <rect x="130" y="300" width="320" height="44" rx="14" fill="rgba(0,0,0,0.24)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="150" y="328" fill="rgba(255,255,255,0.85)" font-family="ui-monospace, SFMono-Regular" font-size="14">[ t₁  t₂  t₃  …  tγ ]</text>
+      <circle cx="418" cy="322" r="8" fill="#42F5B9" fill-opacity="0.75"/>
+    </g>
+  </g>
+
+  <g opacity="0.9">
+    <rect x="690" y="160" width="420" height="210" rx="18" fill="rgba(255,255,255,0.06)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="730" y="210" fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui" font-size="22" font-weight="700">LLM verifier</text>
+    <text x="730" y="246" fill="rgba(255,255,255,0.7)" font-family="ui-sans-serif, system-ui" font-size="16">Scores draft tokens in parallel</text>
+    <text x="730" y="272" fill="rgba(255,255,255,0.7)" font-family="ui-sans-serif, system-ui" font-size="16">Accepts a long prefix exactly</text>
+
+    <g>
+      <rect x="730" y="300" width="340" height="44" rx="14" fill="rgba(0,0,0,0.24)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="750" y="328" fill="rgba(255,255,255,0.85)" font-family="ui-monospace, SFMono-Regular" font-size="14">accept: k tokens → continue</text>
+    </g>
+  </g>
+
+  <path d="M530 265C590 265 622 265 670 265" stroke="url(#grad1)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M654 245L684 265L654 285" stroke="url(#grad1)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <g opacity="0.95">
+    <rect x="210" y="440" width="780" height="220" rx="20" fill="rgba(255,255,255,0.05)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="250" y="492" fill="rgba(255,255,255,0.92)" font-family="ui-sans-serif, system-ui" font-size="20" font-weight="700">SpecDiff-2 alignment</text>
+    <text x="250" y="524" fill="rgba(255,255,255,0.7)" font-family="ui-sans-serif, system-ui" font-size="15">Train-time: streak-distillation • Test-time: self-selection over multiple drafts</text>
+
+    <g>
+      <rect x="250" y="560" width="330" height="70" rx="16" fill="rgba(0,0,0,0.22)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="270" y="592" fill="rgba(255,255,255,0.86)" font-family="ui-sans-serif, system-ui" font-size="14" font-weight="650">Streak-distillation</text>
+      <text x="270" y="616" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">Optimize for long accepted prefixes</text>
+    </g>
+
+    <g>
+      <rect x="620" y="560" width="330" height="70" rx="16" fill="rgba(0,0,0,0.22)" stroke="rgba(255,255,255,0.12)"/>
+      <text x="640" y="592" fill="rgba(255,255,255,0.86)" font-family="ui-sans-serif, system-ui" font-size="14" font-weight="650">Self-selection</text>
+      <text x="640" y="616" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">Pick the best draft for throughput</text>
+    </g>
+  </g>
+</svg>
+

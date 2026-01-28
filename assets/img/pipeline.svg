@@ -1,0 +1,48 @@
+<svg width="1200" height="420" viewBox="0 0 1200 420" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SpecDiff pipeline diagram">
+  <defs>
+    <linearGradient id="g" x1="120" y1="70" x2="1080" y2="350" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8DD3FF" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#B8A1FF" stop-opacity="0.8"/>
+    </linearGradient>
+  </defs>
+
+  <rect x="40" y="44" width="1120" height="332" rx="24" fill="rgba(255,255,255,0.03)" stroke="rgba(255,255,255,0.14)"/>
+
+  <g>
+    <rect x="90" y="110" width="260" height="200" rx="18" fill="rgba(0,0,0,0.22)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="120" y="152" fill="rgba(255,255,255,0.9)" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700">Diffusion drafter</text>
+    <text x="120" y="182" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">Generate γ tokens</text>
+    <text x="120" y="204" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">in parallel (T steps)</text>
+    <rect x="120" y="236" width="200" height="44" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="135" y="264" fill="rgba(255,255,255,0.82)" font-family="ui-monospace, SFMono-Regular" font-size="13">draft window</text>
+  </g>
+
+  <g>
+    <rect x="470" y="110" width="260" height="200" rx="18" fill="rgba(0,0,0,0.22)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="500" y="152" fill="rgba(255,255,255,0.9)" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700">LLM verifier</text>
+    <text x="500" y="182" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">Score all γ positions</text>
+    <text x="500" y="204" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">in parallel</text>
+    <rect x="500" y="236" width="200" height="44" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="515" y="264" fill="rgba(255,255,255,0.82)" font-family="ui-monospace, SFMono-Regular" font-size="13">accept prefix</text>
+  </g>
+
+  <g>
+    <rect x="850" y="110" width="260" height="200" rx="18" fill="rgba(0,0,0,0.22)" stroke="rgba(255,255,255,0.14)"/>
+    <text x="880" y="152" fill="rgba(255,255,255,0.9)" font-family="ui-sans-serif, system-ui" font-size="18" font-weight="700">Advance state</text>
+    <text x="880" y="182" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">Commit accepted tokens</text>
+    <text x="880" y="204" fill="rgba(255,255,255,0.68)" font-family="ui-sans-serif, system-ui" font-size="13">and repeat loop</text>
+    <rect x="880" y="236" width="200" height="44" rx="14" fill="rgba(255,255,255,0.04)" stroke="rgba(255,255,255,0.12)"/>
+    <text x="895" y="264" fill="rgba(255,255,255,0.82)" font-family="ui-monospace, SFMono-Regular" font-size="13">next context</text>
+  </g>
+
+  <path d="M362 210H458" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M444 190L474 210L444 230" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M742 210H838" stroke="url(#g)" stroke-width="6" stroke-linecap="round"/>
+  <path d="M824 190L854 210L824 230" stroke="url(#g)" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+
+  <path d="M980 84C980 54 600 54 600 84" stroke="rgba(255,255,255,0.20)" stroke-width="4" stroke-linecap="round"/>
+  <path d="M600 84C600 114 980 114 980 84" stroke="rgba(255,255,255,0.12)" stroke-width="4" stroke-linecap="round"/>
+  <text x="610" y="70" fill="rgba(255,255,255,0.65)" font-family="ui-sans-serif, system-ui" font-size="12">repeat until EOS</text>
+</svg>
+

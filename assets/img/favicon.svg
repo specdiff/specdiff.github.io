@@ -1,0 +1,12 @@
+<svg width="128" height="128" viewBox="0 0 128 128" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SpecDiff favicon">
+  <defs>
+    <linearGradient id="fg" x1="18" y1="14" x2="110" y2="116" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#8DD3FF"/>
+      <stop offset="1" stop-color="#B8A1FF"/>
+    </linearGradient>
+  </defs>
+  <rect x="10" y="10" width="108" height="108" rx="26" fill="#0B1020" stroke="rgba(255,255,255,0.16)"/>
+  <path d="M38 46C38 38.268 44.268 32 52 32H76C83.732 32 90 38.268 90 46V54C90 61.732 83.732 68 76 68H52C44.268 68 38 74.268 38 82V84C38 91.732 44.268 98 52 98H90" stroke="url(#fg)" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="90" cy="98" r="6" fill="#42F5B9" fill-opacity="0.9"/>
+</svg>
+
