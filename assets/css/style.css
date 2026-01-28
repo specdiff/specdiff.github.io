@@ -73,6 +73,10 @@ a:hover {
   text-decoration: underline;
 }
 
+.muted {
+  color: var(--faint);
+}
+
 .container {
   width: min(var(--max), calc(100% - 48px));
   margin: 0 auto;
@@ -201,6 +205,13 @@ h4 {
   font-size: 16px;
 }
 
+.sublede {
+  margin: 14px 0 0;
+  color: var(--muted);
+  font-size: 14px;
+  max-width: 75ch;
+}
+
 .authors {
   margin: 14px 0 0;
   color: rgba(255, 255, 255, 0.78);
@@ -315,6 +326,13 @@ h4 {
 .two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+.stack {
+  display: grid;
+  grid-template-columns: 1fr;
   gap: 16px;
   align-items: start;
 }
